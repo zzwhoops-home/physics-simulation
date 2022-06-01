@@ -1,1 +1,34 @@
-﻿{}
+{
+    "name": "Spawner",
+    "maps": [
+        {
+            "name": "SpawnActionMap",
+            "id": "61901d96-4849-4b1a-bdc7-fa64aca6de1e",
+            "actions": [
+                {
+                    "name": "SpawnAction",
+                    "type": "Button",
+                    "id": "cb33c1d1-4807-4a5d-a13e-c28486690354",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap(duration=0.5)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9ebb6e65-abd4-4e79-863e-d2d5ec485fcf",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpawnAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
