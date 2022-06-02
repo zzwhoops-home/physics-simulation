@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Obstacle : MonoBehaviour
 {
     private Rigidbody rb;
+    public TextMeshProUGUI counter;
     public float torque;
 
     // Start is called before the first frame update
@@ -25,6 +27,8 @@ public class Obstacle : MonoBehaviour
     private float NumObj() {
         GameObject[] gos;
         gos = GameObject.FindGameObjectsWithTag("Object");
+
+        counter.text = "Objects on Screen: " + gos.Length;
         
         return Mathf.Pow(gos.Length, 0.25f);
     }
