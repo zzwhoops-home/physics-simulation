@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - DestroyObj
+  - Object
   layers:
   - Default
   - TransparentFX
