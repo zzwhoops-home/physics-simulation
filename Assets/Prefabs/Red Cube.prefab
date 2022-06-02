@@ -123,3 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c87e70ef12b582848a71da7782f67acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEffect: {fileID: 3223363920701353056, guid: fe871d2e5bf12fd439e4f7b2bfd1e756,
+    type: 3}
