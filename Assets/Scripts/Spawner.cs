@@ -30,7 +30,7 @@ public class Spawner : MonoBehaviour
     }
 
     private Vector3 randPos() {
-        Vector3 offset = new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f));
+        Vector3 offset = new Vector3(Random.Range(-4f, 4f), Random.Range(-2f, 2f), Random.Range(-4f, 4f));
         return offset;
     }
 
@@ -39,7 +39,7 @@ public class Spawner : MonoBehaviour
     }
 
     private void Spawn(InputAction.CallbackContext ctx) {
-        for (int x = 0; x < 15; x++) {
+        for (int x = 0; x < 5; x++) {
             Instantiate(randObj(), transform.position + randPos(), transform.rotation);
         }
     }

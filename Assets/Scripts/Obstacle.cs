@@ -1,27 +1,32 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class Obstacle : MonoBehaviour
 {
-    private Rigidbody rb;
+    private Rigidbody[] rbs;
     public TextMeshProUGUI counter;
     public float torque;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rbs = Array.FindAll(GetComponentsInChildren<Rigidbody>(), child => child != GetComponent<Rigidbody>());
+        foreach (Rigidbody rb in rbs) {
+            rb.maxAngularVelocity = 100f;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 power = transform.up * torque * NumObj();
-        Debug.Log(power);
-
-        rb.AddTorque(transform.up * torque * NumObj(), ForceMode.Force);
+        float objMult = NumObj();
+        foreach (Rigidbody rb in rbs) {
+            Vector3 power = transform.up * torque * objMult;
+            rb.AddTorque(transform.up * torque * objMult, ForceMode.Force);
+        }
     }
 
     private float NumObj() {
