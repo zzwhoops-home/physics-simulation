@@ -26,9 +26,11 @@ public class Spawner : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if (selectText.gameObject.activeSelf && selected != null) {
+            infoText.text = "Pos: " + selected.transform.position.ToString() + "m\nVel: " + selected.GetComponent<Rigidbody>().velocity.ToString() + "m/s";
+        }
     }
 
     private Vector3 randPos() {
@@ -53,11 +55,10 @@ public class Spawner : MonoBehaviour
             if (rayHit.transform.CompareTag("Object")) {
                 selectText.gameObject.SetActive(true);
                 selected = rayHit.transform.gameObject;
-                infoText.text = "hi"; 
             }
-        }
-        else {
-            selectText.gameObject.SetActive(false);
+            else {
+                selectText.gameObject.SetActive(false);
+            }
         }
     }
 
