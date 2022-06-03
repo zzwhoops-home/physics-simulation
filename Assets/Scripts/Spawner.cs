@@ -2,31 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Spawner : MonoBehaviour
 {
     public GameObject[] toSpawn;
+    public GameObject selected;
     public InputActionAsset actionAsset;
+    public TextMeshProUGUI selectText;
+    public TextMeshProUGUI infoText;
     
-    private InputActionMap spawnerActionMap;
+    private InputActionMap playerActionMap;
     private InputAction spawnAction;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private InputAction leftClick;
 
     void Awake(){
-        spawnerActionMap = actionAsset.FindActionMap("SpawnActionMap");
-        spawnAction = spawnerActionMap.FindAction("SpawnAction");
+        playerActionMap = actionAsset.FindActionMap("PlayerActionMap");
+        spawnAction = playerActionMap.FindAction("SpawnAction");
+        leftClick = playerActionMap.FindAction("LeftClick");
 
-        spawnAction.started += Spawn; 
+        spawnAction.started += Spawn;
+        leftClick.started += Select;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
     }
 
     private Vector3 randPos() {
@@ -34,7 +36,7 @@ public class Spawner : MonoBehaviour
         return offset;
     }
 
-    private GameObject randObj () {
+    private GameObject randObj() {
         return toSpawn[Random.Range(0, toSpawn.Length)];
     }
 
@@ -44,14 +46,26 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    void OnEnable() {
-        spawnerActionMap.Enable();
-        spawnAction.Enable();
+    private void Select(InputAction.CallbackContext ctx) {
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        
+        if (Physics.Raycast(ray, out RaycastHit rayHit)) {
+            if (rayHit.transform.CompareTag("Object")) {
+                selectText.gameObject.SetActive(true);
+                selected = rayHit.transform.gameObject;
+                infoText.text = "hi"; 
+            }
+        }
+        else {
+            selectText.gameObject.SetActive(false);
+        }
+    }
 
+    void OnEnable() {
+        playerActionMap.Enable();
     }
 
     void OnDisable() {
-        spawnerActionMap.Disable();
-        spawnAction.Disable();
+        playerActionMap.Disable();
     }
 }

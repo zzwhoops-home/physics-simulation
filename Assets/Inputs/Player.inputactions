@@ -1,8 +1,8 @@
 {
-    "name": "Spawner",
+    "name": "Player",
     "maps": [
         {
-            "name": "SpawnActionMap",
+            "name": "PlayerActionMap",
             "id": "61901d96-4849-4b1a-bdc7-fa64aca6de1e",
             "actions": [
                 {
@@ -12,6 +12,15 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Tap(duration=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftClick",
+                    "type": "Button",
+                    "id": "4c2f2c69-06ee-4b6e-84e6-44eb2d9ce625",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -24,6 +33,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SpawnAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d61e0bf0-357f-43f0-a7c3-a1645c2b01d0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
