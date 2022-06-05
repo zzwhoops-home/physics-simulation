@@ -34,12 +34,14 @@ public class Spawner : MonoBehaviour
         if (selectText.gameObject.activeSelf && selected != null) {
             Vector3 selectedPos = selected.transform.position;
             Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
-            Vector3 selectedAcc = new Vector3();
+            Vector3 selectedAcc = selectedVel - previousVel;
 
-            string pos = "";
-            string vel = "";
-            string acc = "";
-            infoText.text = "Pos: " + selected.transform.position.ToString() + "m\nVel: " + selected.GetComponent<Rigidbody>().velocity.ToString() + "m/s";
+            string pos = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
+            string vel = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
+            string acc = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
+            infoText.text = pos + "\n" + vel + "\n" + acc;
+
+            previousVel = selected.GetComponent<Rigidbody>().velocity;
         }
         else {
             selectText.gameObject.SetActive(false);
