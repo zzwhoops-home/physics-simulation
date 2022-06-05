@@ -96,11 +96,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Select(InputAction.CallbackContext ctx) {
-        Vector3 pos = new Vector3(Screen.width / 2, 0, Screen.height / 2);
+        Vector3 pos = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         Ray ray = Camera.main.ScreenPointToRay(pos);
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
         
-        if (Physics.Raycast(ray, out RaycastHit rayHit)) {
+        if (Physics.SphereCast(ray, 0.5f, out RaycastHit rayHit)) {
+            if (selected != null) {
+                DisplaySelection(false);
+            }
             if (rayHit.transform.CompareTag("Object")) {
                 selectText.gameObject.SetActive(true);
                 selected = rayHit.transform.gameObject;
@@ -108,9 +110,6 @@ public class PlayerController : MonoBehaviour
             }
             else {
                 selectText.gameObject.SetActive(false);
-                if (selected != null) {
-                    DisplaySelection(false);
-                }
             }
         }
     }
