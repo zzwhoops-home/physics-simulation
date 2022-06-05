@@ -36,11 +36,11 @@ public class Spawner : MonoBehaviour
             Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
             Vector3 selectedAcc = selectedVel - previousVel;
 
-            string pos = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
-            string vel = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
-            string acc = string.Format("({0.00}î, {0.00}ĵ, {0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
+            string pos = string.Format("({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
+            string vel = string.Format("({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
+            string acc = string.Format("({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
             infoText.text = pos + "\n" + vel + "\n" + acc;
-
+            
             previousVel = selected.GetComponent<Rigidbody>().velocity;
         }
         else {
