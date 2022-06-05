@@ -110,6 +110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathEffect: {fileID: 6961228087241121515, guid: fbce675b2b38f5b4da7235dff871324e,
     type: 3}
+  originalMat: {fileID: 2100000, guid: 9cfa34f5bfdf30a4bab68eea8aba12ea, type: 2}
+  selectedMat: {fileID: 2100000, guid: cc01343719ac7a14d98db1a0b4afe5c7, type: 2}
 --- !u!54 &275330586016708233
 Rigidbody:
   m_ObjectHideFlags: 0

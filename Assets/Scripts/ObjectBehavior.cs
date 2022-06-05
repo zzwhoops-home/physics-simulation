@@ -5,6 +5,9 @@ using UnityEngine;
 public class ObjectBehavior : MonoBehaviour
 {
     public GameObject deathEffect;
+    public Material originalMat;
+    public Material selectedMat;
+    private Renderer rdr;
 
     private float lifeTime = 15.0f;
 
@@ -12,6 +15,7 @@ public class ObjectBehavior : MonoBehaviour
     void Start()
     {
         StartCoroutine(Lifespan());
+        rdr = GetComponent<Renderer>();
     }
     void OnTriggerEnter(Collider other)
     {
@@ -28,5 +32,12 @@ public class ObjectBehavior : MonoBehaviour
         GameObject go = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
         Destroy(go, 3f);
         Destroy(gameObject);
+    }
+    public void SelectMat(bool disp) {
+        if (disp) {
+            rdr.material = selectedMat;
+        } else {
+            rdr.material = originalMat;
+        }
     }
 }

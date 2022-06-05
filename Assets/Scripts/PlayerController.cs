@@ -6,10 +6,11 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject selected;
+    private GameObject selected;
     public InputActionAsset actionAsset;
     private InputActionMap playerActionMap;
     private InputAction leftClick;
+    private InputAction movement;
 
     public TextMeshProUGUI selectText;
     public TextMeshProUGUI infoText;
@@ -17,20 +18,19 @@ public class PlayerController : MonoBehaviour
     private Vector3 previousVel;
 
     void Awake() {
+        playerActionMap = actionAsset.FindActionMap("PlayerActionMap");
         leftClick = playerActionMap.FindAction("LeftClick");
+        movement = playerActionMap.FindAction("Movement");
+
         leftClick.started += Select;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        Vector2 input = movement.ReadValue<Vector2>();
+        Vector3 move = new Vector3(input.x, 0, input.y);
+
+        transform.Translate(move * Time.deltaTime * 10f);
     }
 
     void FixedUpdate()
@@ -46,8 +46,7 @@ public class PlayerController : MonoBehaviour
             infoText.text = pos + "\n" + vel + "\n" + acc;
             
             previousVel = selected.GetComponent<Rigidbody>().velocity;
-        }
-        else {
+        } else {
             selectText.gameObject.SetActive(false);
         }
     }
@@ -58,12 +57,20 @@ public class PlayerController : MonoBehaviour
             if (rayHit.transform.CompareTag("Object")) {
                 selectText.gameObject.SetActive(true);
                 selected = rayHit.transform.gameObject;
+                DisplaySelection(true);
             }
             else {
                 selectText.gameObject.SetActive(false);
+                if (selected != null) {
+                    DisplaySelection(false);
+                }
             }
         }
-    }    
+    }
+    
+    private void DisplaySelection(bool disp) {
+        selected.GetComponent<ObjectBehavior>().SelectMat(disp);
+    }
 
     void OnEnable() {
         playerActionMap.Enable();

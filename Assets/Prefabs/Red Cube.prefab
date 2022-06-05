@@ -125,3 +125,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathEffect: {fileID: 3223363920701353056, guid: fe871d2e5bf12fd439e4f7b2bfd1e756,
     type: 3}
+  originalMat: {fileID: 2100000, guid: 8489ed1c609ee6841b7fa8b56b64e6e1, type: 2}
+  selectedMat: {fileID: 2100000, guid: cc01343719ac7a14d98db1a0b4afe5c7, type: 2}
