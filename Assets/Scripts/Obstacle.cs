@@ -15,7 +15,7 @@ public class Obstacle : MonoBehaviour
     {
         rbs = Array.FindAll(GetComponentsInChildren<Rigidbody>(), child => child != GetComponent<Rigidbody>());
         foreach (Rigidbody rb in rbs) {
-            rb.maxAngularVelocity = 100f;
+            rb.maxAngularVelocity = 15f;
         }
     }
 
@@ -25,7 +25,7 @@ public class Obstacle : MonoBehaviour
         float objMult = NumObj();
         foreach (Rigidbody rb in rbs) {
             Vector3 power = transform.up * torque * objMult;
-            rb.AddTorque(transform.up * torque * objMult, ForceMode.Force);
+            rb.AddTorque(transform.up * torque * objMult, ForceMode.Acceleration);
         }
     }
 

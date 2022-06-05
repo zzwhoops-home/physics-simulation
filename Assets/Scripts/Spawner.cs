@@ -16,6 +16,9 @@ public class Spawner : MonoBehaviour
     private InputAction spawnAction;
     private InputAction leftClick;
 
+    public int objectSpawnAmt;
+    private Vector3 previousVel;
+
     void Awake(){
         playerActionMap = actionAsset.FindActionMap("PlayerActionMap");
         spawnAction = playerActionMap.FindAction("SpawnAction");
@@ -29,7 +32,17 @@ public class Spawner : MonoBehaviour
     void FixedUpdate()
     {
         if (selectText.gameObject.activeSelf && selected != null) {
+            Vector3 selectedPos = selected.transform.position;
+            Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
+            Vector3 selectedAcc = new Vector3();
+
+            string pos = "";
+            string vel = "";
+            string acc = "";
             infoText.text = "Pos: " + selected.transform.position.ToString() + "m\nVel: " + selected.GetComponent<Rigidbody>().velocity.ToString() + "m/s";
+        }
+        else {
+            selectText.gameObject.SetActive(false);
         }
     }
 
@@ -43,7 +56,7 @@ public class Spawner : MonoBehaviour
     }
 
     private void Spawn(InputAction.CallbackContext ctx) {
-        for (int x = 0; x < 5; x++) {
+        for (int x = 0; x < objectSpawnAmt; x++) {
             Instantiate(randObj(), transform.position + randPos(), transform.rotation);
         }
     }

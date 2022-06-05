@@ -26,7 +26,7 @@ public class ObjectBehavior : MonoBehaviour
     }
     private void KillObject() {
         GameObject go = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
-        Destroy(go, 2);
+        Destroy(go, 3f);
         Destroy(gameObject);
     }
 }
