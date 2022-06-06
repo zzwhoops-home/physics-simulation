@@ -8,17 +8,13 @@ public class ObjectBehavior : MonoBehaviour
     public Material originalMat;
     public Material selectedMat;
     private Renderer rdr;
-    private Rigidbody rb;
-
-    // amount of time object will remain after it stops moving
-    private float lifeTime = 5.0f;
+    private float lifeTime = 30.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(Lifespan());
         rdr = GetComponent<Renderer>();
-        rb = GetComponent<Rigidbody>();
+        StartCoroutine(Lifespan());
     }
     void OnTriggerEnter(Collider other)
     {
@@ -28,7 +24,6 @@ public class ObjectBehavior : MonoBehaviour
     }
     private IEnumerator Lifespan()
     {
-        yield return new WaitWhile(() => rb.velocity.magnitude != 0);
         yield return new WaitForSeconds(lifeTime);
         KillObject();
     }

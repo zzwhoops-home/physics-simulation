@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private InputAction sprint;
     private InputAction mouse;
 
+    private float hitRadius = 0.33f;
     private GameObject selected;
     public TextMeshProUGUI selectText;
     public TextMeshProUGUI infoText;
@@ -99,7 +100,7 @@ public class PlayerController : MonoBehaviour
         Vector3 pos = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         Ray ray = Camera.main.ScreenPointToRay(pos);
         
-        if (Physics.SphereCast(ray, 0.5f, out RaycastHit rayHit)) {
+        if (Physics.SphereCast(ray, hitRadius, out RaycastHit rayHit)) {
             if (selected != null) {
                 DisplaySelection(false);
             }
