@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float sensitivity;
     private Vector3 move;
     private float upwardVel;
+    [SerializeField] private bool grounded;
 
     private Camera cam;
 
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         cam = Camera.main;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Awake() {
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
         jump = playerActionMap.FindAction("Jump");
 
         leftClick.started += Select;
-        jump.started += Jump;
+        jump.performed += Jump;
     }
 
     void Update()
@@ -75,19 +77,28 @@ public class PlayerController : MonoBehaviour
     }
 
     private void MovePlayer() {
-        Vector2 input = movement.ReadValue<Vector2>();
-        Vector3 horizontal = input.x * cam.transform.right;
-        Vector3 forward = input.y * cam.transform.forward;
-        move = (horizontal + forward) * movementSpeed; 
+        grounded = characterController.isGrounded;
 
-        if (sprint.ReadValue<float>() == 1f && characterController.isGrounded) { move *= 1.75f; };
+        if (grounded) {
+            Vector2 input = movement.ReadValue<Vector2>();
+            if (input.magnitude == 0) {
+                move = Vector3.zero;
+            } else {
+                Vector3 horizontal = input.x * cam.transform.right;
+                Vector3 forward = input.y * cam.transform.forward;
+                move = (horizontal + forward) * movementSpeed;
+            }
 
-        if (characterController.isGrounded && upwardVel < 0) {
-            upwardVel = 0;
+            if (sprint.ReadValue<float>() == 1f) { move *= 1.75f; };
+
+            if (upwardVel < 0) {
+                upwardVel = 0;
+            }
         } else {
             upwardVel -= (gravity * Time.deltaTime);
-            move.y = upwardVel;
         }
+        
+        move.y = upwardVel;
 
         characterController.Move(move * Time.deltaTime);
     }
@@ -125,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext ctx) {
         // v = sqrt(2gh)
-        if (characterController.isGrounded) {
+        if (grounded) {
             upwardVel += Mathf.Sqrt(2 * gravity * jumpHeight);
         }
     }

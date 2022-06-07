@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counter: {fileID: 358115783}
-  torque: 0.5
+  torque: 0.05
 --- !u!4 &465119302
 Transform:
   m_ObjectHideFlags: 0
@@ -2072,6 +2072,7 @@ MonoBehaviour:
   gravity: 9.81
   jumpHeight: 1.5
   sensitivity: 0.2
+  grounded: 0
   actionAsset: {fileID: -944628639613478452, guid: 2185fcee6ed29cc4398da9801652d0a6,
     type: 3}
   selectText: {fileID: 1352844006}
@@ -2088,11 +2089,11 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.55
   m_SlopeLimit: 45
   m_StepOffset: 0.5
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_SkinWidth: 0.2
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1772558638
 Transform:

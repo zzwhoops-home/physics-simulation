@@ -25,7 +25,7 @@ public class Obstacle : MonoBehaviour
         float objMult = NumObj();
         foreach (Rigidbody rb in rbs) {
             Vector3 power = transform.up * torque * objMult;
-            rb.AddTorque(transform.up * torque * objMult, ForceMode.Acceleration);
+            rb.AddTorque(transform.up * torque * objMult, ForceMode.VelocityChange);
         }
     }
 
