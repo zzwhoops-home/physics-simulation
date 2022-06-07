@@ -7,6 +7,9 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController characterController;
+    private CapsuleCollider capsuleCollider;
+    private float radius;
+    private Vector3 bottom, top;
     public int movementSpeed;
     public float gravity;
     public float jumpHeight;
@@ -15,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 move;
     private float upwardVel;
     [SerializeField] private bool grounded;
+    [SerializeField] private LayerMask layerMask;
 
     private Camera cam;
 
@@ -41,6 +45,9 @@ public class PlayerController : MonoBehaviour
     }
 
     void Awake() {
+        capsuleCollider = transform.GetChild(0).GetComponent<CapsuleCollider>();
+        radius = capsuleCollider.radius;
+
         playerActionMap = actionAsset.FindActionMap("PlayerActionMap");
         leftClick = playerActionMap.FindAction("LeftClick");
         movement = playerActionMap.FindAction("Movement");
@@ -49,36 +56,23 @@ public class PlayerController : MonoBehaviour
         jump = playerActionMap.FindAction("Jump");
 
         leftClick.started += Select;
-        jump.performed += Jump;
+        jump.started += Jump;
     }
 
     void Update()
     {
-        MovePlayer();
         MoveCamera();
     }
 
     void FixedUpdate()
     {
-        if (selectText.gameObject.activeSelf && selected != null) {
-            Vector3 selectedPos = selected.transform.position;
-            Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
-            Vector3 selectedAcc = selectedVel - previousVel;
+        OnGround();
+        MovePlayer();
 
-            string pos = string.Format("x: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
-            string vel = string.Format("dx/dt: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
-            string acc = string.Format("d^2(x)/dt^2: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
-            infoText.text = pos + "\n" + vel + "\n" + acc;
-            
-            previousVel = selected.GetComponent<Rigidbody>().velocity;
-        } else {
-            selectText.gameObject.SetActive(false);
-        }
+        SelectedObject();
     }
 
     private void MovePlayer() {
-        grounded = characterController.isGrounded;
-
         if (grounded) {
             Vector2 input = movement.ReadValue<Vector2>();
             if (input.magnitude == 0) {
@@ -91,16 +85,28 @@ public class PlayerController : MonoBehaviour
 
             if (sprint.ReadValue<float>() == 1f) { move *= 1.75f; };
 
-            if (upwardVel < 0) {
-                upwardVel = 0;
-            }
+        if (upwardVel < 0) {
+            upwardVel = 0f;
+        }
         } else {
-            upwardVel -= (gravity * Time.deltaTime);
+            upwardVel -= (gravity * Time.fixedDeltaTime);
         }
         
         move.y = upwardVel;
 
-        characterController.Move(move * Time.deltaTime);
+        characterController.Move(move * Time.fixedDeltaTime);
+    }
+
+    private void OnGround() {
+        top = transform.position + (transform.up * ((capsuleCollider.height / 2 - radius) + characterController.skinWidth));
+        bottom = transform.position - (transform.up * ((capsuleCollider.height / 2 - radius) + characterController.skinWidth + 0.05f));
+
+        Collider[] colliders = Physics.OverlapCapsule(bottom, top, radius, layerMask);
+        if (colliders.Length != 0) {
+            grounded = true;
+        } else {
+            grounded = false;
+        }
     }
 
     private void MoveCamera() {
@@ -130,6 +136,24 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    private void SelectedObject() { 
+        if (selectText.gameObject.activeSelf && selected != null) {
+            Vector3 selectedPos = selected.transform.position;
+            Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
+            Vector3 selectedAcc = selectedVel - previousVel;
+
+            string obj = "Object: " + selected.name;
+            string pos = string.Format("x: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
+            string vel = string.Format("dx/dt: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
+            string acc = string.Format("d^2(x)/dt^2: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
+            infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc;
+            
+            previousVel = selected.GetComponent<Rigidbody>().velocity;
+        } else {
+            selectText.gameObject.SetActive(false);
+        }
+    }
+
     private void DisplaySelection(bool disp) {
         selected.GetComponent<ObjectBehavior>().SelectMat(disp);
     }
