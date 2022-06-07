@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController characterController;
     public int movementSpeed;
-    private float velocity;
-    public float gravity = -9.81f;
+    public float gravity;
+    public float jumpHeight;
     private Vector3 camRotation;
     public float sensitivity;
+    private Vector3 move;
+    private float upwardVel;
 
     private Camera cam;
 
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private InputAction movement;
     private InputAction sprint;
     private InputAction mouse;
+    private InputAction jump;
 
     private float hitRadius = 0.33f;
     private GameObject selected;
@@ -41,8 +44,10 @@ public class PlayerController : MonoBehaviour
         movement = playerActionMap.FindAction("Movement");
         sprint = playerActionMap.FindAction("Sprint");
         mouse = playerActionMap.FindAction("Mouse");
+        jump = playerActionMap.FindAction("Jump");
 
         leftClick.started += Select;
+        jump.started += Jump;
     }
 
     void Update()
@@ -72,20 +77,19 @@ public class PlayerController : MonoBehaviour
     private void MovePlayer() {
         Vector2 input = movement.ReadValue<Vector2>();
         Vector3 horizontal = input.x * cam.transform.right;
-        Vector3 vertical = input.y * cam.transform.forward;
-        Vector3 move = (horizontal + vertical) * movementSpeed * Time.deltaTime; 
+        Vector3 forward = input.y * cam.transform.forward;
+        move = (horizontal + forward) * movementSpeed; 
 
-        if (sprint.ReadValue<float>() == 1f) { move *= 1.75f; };
+        if (sprint.ReadValue<float>() == 1f && characterController.isGrounded) { move *= 1.75f; };
 
-        characterController.Move(move);
-
-        if (characterController.isGrounded) {
-            velocity = 0;
+        if (characterController.isGrounded && upwardVel < 0) {
+            upwardVel = 0;
         } else {
-            velocity += gravity * Time.deltaTime;
-            Vector3 upwardMove = new Vector3(0, velocity, 0);
-            characterController.Move(upwardMove);
+            upwardVel -= (gravity * Time.deltaTime);
+            move.y = upwardVel;
         }
+
+        characterController.Move(move * Time.deltaTime);
     }
 
     private void MoveCamera() {
@@ -117,6 +121,13 @@ public class PlayerController : MonoBehaviour
     
     private void DisplaySelection(bool disp) {
         selected.GetComponent<ObjectBehavior>().SelectMat(disp);
+    }
+
+    private void Jump(InputAction.CallbackContext ctx) {
+        // v = sqrt(2gh)
+        if (characterController.isGrounded) {
+            upwardVel += Mathf.Sqrt(2 * gravity * jumpHeight);
+        }
     }
 
     void OnEnable() {
