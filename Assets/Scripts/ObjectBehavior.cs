@@ -8,7 +8,7 @@ public class ObjectBehavior : MonoBehaviour
     public Material originalMat;
     public Material selectedMat;
     private Renderer rdr;
-    private float lifeTime = 30.0f;
+    public float lifeTime = 30.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -28,8 +28,10 @@ public class ObjectBehavior : MonoBehaviour
         KillObject();
     }
     private void KillObject() {
-        GameObject go = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
-        Destroy(go, 3f);
+        if (deathEffect != null) {
+            GameObject go = Instantiate(deathEffect, transform.position, deathEffect.transform.rotation);
+            Destroy(go, 3f);
+        }
         Destroy(gameObject);
     }
     public void SelectMat(bool disp) {

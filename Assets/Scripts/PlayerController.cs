@@ -140,12 +140,12 @@ public class PlayerController : MonoBehaviour
         if (selectText.gameObject.activeSelf && selected != null) {
             Vector3 selectedPos = selected.transform.position;
             Vector3 selectedVel = selected.GetComponent<Rigidbody>().velocity;
-            Vector3 selectedAcc = selectedVel - previousVel;
+            Vector3 selectedAcc = (selectedVel - previousVel) / Time.fixedDeltaTime;
 
             string obj = "Object: " + selected.name;
             string pos = string.Format("x: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
-            string vel = string.Format("dx/dt: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedVel.x, selectedVel.y, selectedVel.z);
-            string acc = string.Format("d^2(x)/dt^2: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂)", selectedAcc.x, selectedAcc.y, selectedAcc.z);
+            string vel = string.Format("dx/dt: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂) = {0:0.00}m/s", selectedVel.x, selectedVel.y, selectedVel.z, selectedVel.magnitude);
+            string acc = string.Format("d<sup>2</sup>(x)/dt<sup>2</sup>: ({0:0.00}î, {0:0.00}ĵ, {0:0.00}k̂ = {0:0.00}m/s^2)", selectedAcc.x, selectedAcc.y, selectedAcc.z, selectedAcc.magnitude);
             infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc;
             
             previousVel = selected.GetComponent<Rigidbody>().velocity;
