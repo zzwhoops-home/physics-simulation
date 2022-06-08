@@ -51,10 +51,6 @@ public class CannonBehavior : MonoBehaviour
         GameObject cb = Instantiate(cannonball, nozzleOffset.transform.position, nozzleOffset.transform.rotation) as GameObject;
         cb.GetComponent<Rigidbody>().AddForce(-transform.right * firePower, ForceMode.VelocityChange);
     }
-    private void KillParticle(InputAction.CallbackContext ctx) {
-
-    }
-
 
     void OnEnable() {
         playerActionMap.Enable();

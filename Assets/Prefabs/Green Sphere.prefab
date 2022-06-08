@@ -111,6 +111,7 @@ MonoBehaviour:
     type: 3}
   originalMat: {fileID: 2100000, guid: 98e654611937df449a414fd3c2b0c849, type: 2}
   selectedMat: {fileID: 2100000, guid: cc01343719ac7a14d98db1a0b4afe5c7, type: 2}
+  lifeTime: 60
 --- !u!54 &-2181837727163241325
 Rigidbody:
   m_ObjectHideFlags: 0

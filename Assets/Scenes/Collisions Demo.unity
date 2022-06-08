@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: f327abef3d3d0924fb8fc7b1a3aa1bf8, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.7037302, g: 0.640853, b: 0.6215963, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -422,6 +422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cannonball: {fileID: 2119017299864401699, guid: 48389ea3dd61acc4cb353bc24913db7c,
     type: 3}
+  firePower: 100
   charge: {fileID: 1113670814055812648, guid: 40ba5be3515ba744b811de1820878fdd, type: 3}
   offset: {fileID: 1407185008}
   nozzleOffset: {fileID: 1113670813947004727}
@@ -1938,7 +1939,7 @@ PrefabInstance:
     - target: {fileID: 1191144334062250393, guid: 5cae7a2f9e78fee46bed03c0685ae31a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1191144334062250393, guid: 5cae7a2f9e78fee46bed03c0685ae31a,
         type: 3}
@@ -1998,7 +1999,7 @@ PrefabInstance:
     - target: {fileID: 2725905796244599108, guid: 5cae7a2f9e78fee46bed03c0685ae31a,
         type: 3}
       propertyPath: objectSpawnAmt
-      value: 50
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2725905796244599108, guid: 5cae7a2f9e78fee46bed03c0685ae31a,
         type: 3}
