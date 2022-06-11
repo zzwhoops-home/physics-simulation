@@ -86,10 +86,11 @@ public class PlayerController : MonoBehaviour
 
             if (sprint.ReadValue<float>() == 1f) { move *= 1.75f; };
 
-        if (upwardVel < 0) {
-            upwardVel = 0f;
-        }
+            if (upwardVel < 0) {
+                upwardVel = 0f;
+            }
         } else {
+            move = characterController.velocity;
             upwardVel -= (gravity * Time.fixedDeltaTime);
         }
         
