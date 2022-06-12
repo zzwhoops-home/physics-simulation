@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -10,11 +11,11 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider capsuleCollider;
     private float radius;
     private Vector3 bottom, top;
-    public int movementSpeed;
-    public float gravity;
-    public float jumpHeight;
+    [SerializeField] private int movementSpeed;
+    [SerializeField] private float gravity;
+    [SerializeField] private float jumpHeight;
     private Vector3 camRotation;
-    public float sensitivity;
+    [SerializeField] private float sensitivity;
     private Vector3 move;
     private float upwardVel;
     [SerializeField] private bool grounded;
@@ -22,9 +23,12 @@ public class PlayerController : MonoBehaviour
 
     private Camera cam;
 
-    public InputActionAsset actionAsset;
+    [SerializeField] private LineRenderer pointLineRenderer;
+
+    [SerializeField] private InputActionAsset actionAsset;
     private InputActionMap playerActionMap;
     private InputAction leftClick;
+    private InputAction middleClick;
     private InputAction movement;
     private InputAction sprint;
     private InputAction mouse;
@@ -32,8 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private float hitRadius = 0.33f;
     private GameObject selected;
-    public TextMeshProUGUI selectText;
-    public TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI selectText;
+    [SerializeField] private TextMeshProUGUI infoText;
 
     private Vector3 previousVel;
     private Vector3 previousPos;
@@ -51,12 +55,14 @@ public class PlayerController : MonoBehaviour
 
         playerActionMap = actionAsset.FindActionMap("PlayerActionMap");
         leftClick = playerActionMap.FindAction("LeftClick");
+        middleClick = playerActionMap.FindAction("MiddleClick");
         movement = playerActionMap.FindAction("Movement");
         sprint = playerActionMap.FindAction("Sprint");
         mouse = playerActionMap.FindAction("Mouse");
         jump = playerActionMap.FindAction("Jump");
 
         leftClick.started += Select;
+        middleClick.started += NavPoint;
         jump.started += Jump;
     }
 
@@ -97,6 +103,13 @@ public class PlayerController : MonoBehaviour
         move.y = upwardVel;
 
         characterController.Move(move * Time.fixedDeltaTime);
+    }
+
+    private void Jump(InputAction.CallbackContext ctx) {
+        // v = sqrt(2gh)
+        if (grounded) {
+            upwardVel += Mathf.Sqrt(2 * gravity * jumpHeight);
+        }
     }
 
     private void OnGround() {
@@ -161,10 +174,12 @@ public class PlayerController : MonoBehaviour
         selected.GetComponent<ObjectBehavior>().SelectMat(disp);
     }
 
-    private void Jump(InputAction.CallbackContext ctx) {
-        // v = sqrt(2gh)
-        if (grounded) {
-            upwardVel += Mathf.Sqrt(2 * gravity * jumpHeight);
+    private void NavPoint(InputAction.CallbackContext ctx) {
+        Vector3 pos = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+        Ray ray = Camera.main.ScreenPointToRay(pos);
+
+        if (Physics.Raycast(ray, out RaycastHit rayHit, 20f)) {
+            pointLineRenderer.SetPosition(1, rayHit.transform.position);
         }
     }
 
