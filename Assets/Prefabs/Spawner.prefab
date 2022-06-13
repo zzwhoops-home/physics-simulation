@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toSpawn:
+  - {fileID: 8473713016703452359, guid: 3110b2a14bd523044847b662dcc1cae4, type: 3}
+  - {fileID: 5120851184522836669, guid: 531f9334793b6464bacbdfb387ac2454, type: 3}
+  - {fileID: 1101336622350122237, guid: d74eb8becd66cb74da16ba4bc6feee65, type: 3}
   - {fileID: 2363965762458638338, guid: 9f53466a870deeb4ea4c142fe36aa6eb, type: 3}
-  - {fileID: 1101336622350122237, guid: 3c982f9b46ed3ea488f16ed6f069a420, type: 3}
-  - {fileID: 5120851184522836669, guid: 423bfb6acab4d4540ad7ebddcc2ab5c3, type: 3}
   actionAsset: {fileID: -944628639613478452, guid: 2185fcee6ed29cc4398da9801652d0a6,
     type: 3}
+  objectSpawnAmt: 25

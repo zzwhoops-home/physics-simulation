@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.AI;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -19,11 +20,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 move;
     private float upwardVel;
     [SerializeField] private bool grounded;
-    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private LayerMask isGroundedLayerMask;
+    [SerializeField] private LayerMask navPointLayerMask;
 
     private Camera cam;
 
-    [SerializeField] private LineRenderer pointLineRenderer;
+    [SerializeField] private Transform nozzleOffset;
+    [SerializeField] private GameObject navPoint;
+    private GameObject curNavPoint;
+    private NavMeshDemo navMeshDemo;
 
     [SerializeField] private InputActionAsset actionAsset;
     private InputActionMap playerActionMap;
@@ -47,6 +52,8 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         cam = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
+
+        navMeshDemo = GameObject.FindGameObjectWithTag("NavMeshAgent").GetComponent<NavMeshDemo>();
     }
 
     void Awake() {
@@ -116,7 +123,7 @@ public class PlayerController : MonoBehaviour
         top = transform.position + (transform.up * ((capsuleCollider.height / 2 - radius) + characterController.skinWidth));
         bottom = transform.position - (transform.up * ((capsuleCollider.height / 2 - radius) + characterController.skinWidth + 0.05f));
 
-        Collider[] colliders = Physics.OverlapCapsule(bottom, top, radius, layerMask);
+        Collider[] colliders = Physics.OverlapCapsule(bottom, top, radius, isGroundedLayerMask);
         if (colliders.Length != 0) {
             grounded = true;
         } else {
@@ -178,8 +185,18 @@ public class PlayerController : MonoBehaviour
         Vector3 pos = new Vector3(Screen.width / 2, Screen.height / 2, 0);
         Ray ray = Camera.main.ScreenPointToRay(pos);
 
-        if (Physics.Raycast(ray, out RaycastHit rayHit, 20f)) {
-            pointLineRenderer.SetPosition(1, rayHit.transform.position);
+        if (Physics.Raycast(ray, out RaycastHit rayHit, 69f, navPointLayerMask)) {
+            if (curNavPoint != null) {
+                Destroy(curNavPoint);
+            }
+            curNavPoint = Instantiate(navPoint, nozzleOffset.transform) as GameObject;
+            LineRenderer curLineRenderer = curNavPoint.GetComponent<LineRenderer>();
+
+            curLineRenderer.SetPosition(0, nozzleOffset.position);
+            curLineRenderer.SetPosition(1, rayHit.point);
+            Destroy(curNavPoint, 3f);
+
+            navMeshDemo.MoveAgent(rayHit.point);
         }
     }
 

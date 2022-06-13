@@ -7,6 +7,7 @@ TagManager:
   - DestroyObj
   - Object
   - Platform
+  - NavMeshAgent
   layers:
   - Default
   - TransparentFX
