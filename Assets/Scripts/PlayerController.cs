@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     private float radius;
     private Vector3 bottom, top;
     [SerializeField] private int movementSpeed;
-    [SerializeField] private float gravity;
     [SerializeField] private float jumpHeight;
     private Vector3 camRotation;
     [SerializeField] private float sensitivity;
@@ -104,7 +103,7 @@ public class PlayerController : MonoBehaviour
             }
         } else {
             move = characterController.velocity;
-            upwardVel -= (gravity * Time.fixedDeltaTime);
+            upwardVel -= (Constants.gravity * Time.fixedDeltaTime);
         }
         
         move.y = upwardVel;
@@ -115,7 +114,7 @@ public class PlayerController : MonoBehaviour
     private void Jump(InputAction.CallbackContext ctx) {
         // v = sqrt(2gh)
         if (grounded) {
-            upwardVel += Mathf.Sqrt(2 * gravity * jumpHeight);
+            upwardVel += Mathf.Sqrt(2 * Constants.gravity * jumpHeight);
         }
     }
 
@@ -158,17 +157,29 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    // get information about the selected object and update information box
     private void SelectedObject() { 
         if (selectText.gameObject.activeSelf && selected != null) {
+            Rigidbody rb = selected.GetComponent<Rigidbody>();
+
             Vector3 selectedPos = selected.transform.position;
-            Vector3 selectedVel = selected.gameObject.GetComponent<Rigidbody>().velocity;
+            Vector3 selectedVel = rb.velocity;
             Debug.Log(selectedVel);
             Vector3 selectedAcc = (selectedVel - previousVel) / Time.fixedDeltaTime;
+            // P = mv
+            Vector3 selectedMNTM = rb.mass * selectedVel;
+            // T = 1/2mv^2
+            float selectedKE = 0.5f * rb.mass * Mathf.Pow(selectedVel.magnitude, 2);
+            // U = mgh
+            float selectedPE = rb.mass * Constants.gravity * selectedPos.y;
 
             string obj = "Object: " + selected.name;
             string pos = string.Format("x: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
             string vel = string.Format("dx/dt: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂) = {3:0.00}m/s", selectedVel.x, selectedVel.y, selectedVel.z, selectedVel.magnitude);
             string acc = string.Format("d<sup>2</sup>(x)/dt<sup>2</sup>: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}m/s^2)", selectedAcc.x, selectedAcc.y, selectedAcc.z, selectedAcc.magnitude);
+            string mntm = string.Format("P: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}N*s)", selectedMNTM.x, selectedMNTM.y, selectedMNTM.z, selectedMNTM.magnitude);
+            string ke = string.Format("KE = {0:0.00}J", selectedKE);
+            string pe = string.Format("PE = {0:0.00}J", selectedPE);
             infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc;
             
             previousVel = selectedVel;
