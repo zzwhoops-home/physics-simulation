@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     private float hitRadius = 0.33f;
     private GameObject selected;
+    [SerializeField] private GameObject selectTextObject;
     [SerializeField] private TextMeshProUGUI selectText;
     [SerializeField] private TextMeshProUGUI infoText;
 
@@ -147,44 +148,47 @@ public class PlayerController : MonoBehaviour
                 DisplaySelection(false);
             }
             if (rayHit.transform.CompareTag("Object")) {
-                selectText.gameObject.SetActive(true);
+                selectTextObject.SetActive(true);
                 selected = rayHit.transform.gameObject;
                 DisplaySelection(true);
             }
             else {
-                selectText.gameObject.SetActive(false);
+                selectTextObject.SetActive(false);
             }
         }
     }
     
     // get information about the selected object and update information box
     private void SelectedObject() { 
-        if (selectText.gameObject.activeSelf && selected != null) {
+        if (selectTextObject.activeSelf && selected != null) {
             Rigidbody rb = selected.GetComponent<Rigidbody>();
 
             Vector3 selectedPos = selected.transform.position;
             Vector3 selectedVel = rb.velocity;
             Debug.Log(selectedVel);
             Vector3 selectedAcc = (selectedVel - previousVel) / Time.fixedDeltaTime;
+            // F = ma
+            Vector3 selectedForce = rb.mass * selectedAcc;
             // P = mv
             Vector3 selectedMNTM = rb.mass * selectedVel;
             // T = 1/2mv^2
             float selectedKE = 0.5f * rb.mass * Mathf.Pow(selectedVel.magnitude, 2);
-            // U = mgh
-            float selectedPE = rb.mass * Constants.gravity * selectedPos.y;
+            // U = mgh - maybe replace 7.5 with an actual ground level
+            float selectedPE = rb.mass * Constants.gravity * (selectedPos.y + 7.5f);
 
             string obj = "Object: " + selected.name;
             string pos = string.Format("x: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
             string vel = string.Format("dx/dt: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂) = {3:0.00}m/s", selectedVel.x, selectedVel.y, selectedVel.z, selectedVel.magnitude);
             string acc = string.Format("d<sup>2</sup>(x)/dt<sup>2</sup>: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}m/s^2)", selectedAcc.x, selectedAcc.y, selectedAcc.z, selectedAcc.magnitude);
+            string force = string.Format("F: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}m/s^2)", selectedForce.x, selectedForce.y, selectedForce.z, selectedForce.magnitude);
             string mntm = string.Format("P: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}N*s)", selectedMNTM.x, selectedMNTM.y, selectedMNTM.z, selectedMNTM.magnitude);
             string ke = string.Format("KE = {0:0.00}J", selectedKE);
             string pe = string.Format("PE = {0:0.00}J", selectedPE);
-            infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc + "\n" + mntm + "\n" + ke + "\n" + pe;
+            infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc + "\n" + force + "\n" + mntm + "\n" + ke + "\n" + pe;
             
             previousVel = selectedVel;
         } else {
-            selectText.gameObject.SetActive(false);
+            selectTextObject.SetActive(false);
         }
     }
 
