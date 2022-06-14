@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
             string mntm = string.Format("P: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}N*s)", selectedMNTM.x, selectedMNTM.y, selectedMNTM.z, selectedMNTM.magnitude);
             string ke = string.Format("KE = {0:0.00}J", selectedKE);
             string pe = string.Format("PE = {0:0.00}J", selectedPE);
-            infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc;
+            infoText.text = obj + "\n" + pos + "\n" + vel + "\n" + acc + "\n" + mntm + "\n" + ke + "\n" + pe;
             
             previousVel = selectedVel;
         } else {
