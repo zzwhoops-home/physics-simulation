@@ -162,7 +162,7 @@ public class PlayerController : MonoBehaviour
     private void SelectedObject() { 
         if (selectTextObject.activeSelf && selected != null) {
             Rigidbody rb = selected.GetComponent<Rigidbody>();
-
+            
             Vector3 selectedPos = selected.transform.position;
             Vector3 selectedVel = rb.velocity;
             Debug.Log(selectedVel);
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
             string pos = string.Format("x: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂)", selectedPos.x, selectedPos.y, selectedPos.z);
             string vel = string.Format("dx/dt: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂) = {3:0.00}m/s", selectedVel.x, selectedVel.y, selectedVel.z, selectedVel.magnitude);
             string acc = string.Format("d<sup>2</sup>(x)/dt<sup>2</sup>: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}m/s^2)", selectedAcc.x, selectedAcc.y, selectedAcc.z, selectedAcc.magnitude);
-            string force = string.Format("F: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}m/s^2)", selectedForce.x, selectedForce.y, selectedForce.z, selectedForce.magnitude);
+            string force = string.Format("F: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}N)", selectedForce.x, selectedForce.y, selectedForce.z, selectedForce.magnitude);
             string mntm = string.Format("P: ({0:0.00}î, {1:0.00}ĵ, {2:0.00}k̂ = {3:0.00}N*s)", selectedMNTM.x, selectedMNTM.y, selectedMNTM.z, selectedMNTM.magnitude);
             string ke = string.Format("KE = {0:0.00}J", selectedKE);
             string pe = string.Format("PE = {0:0.00}J", selectedPE);
