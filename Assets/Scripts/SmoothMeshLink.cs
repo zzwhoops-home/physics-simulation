@@ -36,21 +36,25 @@ public class SmoothMeshLink : MonoBehaviour
 
         // simulate jumping, kind of
         float dur = 0f;
+
+        // vertex of parabolic equation
         float maxHeight = 2f * (0.5f - (1 / Constants.gravity)) + vertDistance;
+
+        // is the player falling or jumping up to a surface? also assuming 30 degree jump angle, need to recalculate properly
+        float horSpeed = navAgent.speed * Mathf.Cos(Mathf.PI / 6);
         if (vertDistance > 0) {
-            dur = (horDistance / (navAgent.speed * Mathf.Cos(Mathf.PI / 6))) + (Mathf.Sqrt(2f * maxHeight / Constants.gravity));
+            dur = (horDistance / horSpeed) + (Mathf.Sqrt(2f * maxHeight / Constants.gravity));
         } else if (vertDistance == 0) {
-            dur = (horDistance / (navAgent.speed * Mathf.Cos(Mathf.PI / 6)));
+            dur = (horDistance / horSpeed);
         } else if (vertDistance < 0) {
-            dur = (horDistance / (navAgent.speed * Mathf.Cos(Mathf.PI / 6))) + (Mathf.Sqrt(2f * Mathf.Abs(vertDistance)/ Constants.gravity));
+            dur = (horDistance / horSpeed) + (Mathf.Sqrt(2f * Mathf.Abs(vertDistance)/ Constants.gravity));
         }
 
         Debug.Log(string.Format("{0:0.00} H, {1:0.00} V, Duration: {2:0.00}, maxHeight: {3:0.00}", horDistance, vertDistance, dur, maxHeight));
 
         float n_time = 0.0f;
         while (n_time < 1.0f) {
-            float yOffset = linkCurve.Evaluate(n_time);
-            Debug.Log(yOffset);
+            float yOffset = linkCurve.Evaluate(n_time) * (vertDistance != 0 ? Mathf.Clamp(Mathf.Abs(vertDistance), 0f, 10f) : 1f);
 
             navAgent.transform.position = Vector3.Lerp(startPos, endPos, n_time) + (yOffset * Vector3.up);
             if ((endPos - navAgent.transform.position).magnitude < 0.25f) {
