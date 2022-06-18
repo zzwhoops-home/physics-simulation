@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
             if (sprint.ReadValue<float>() == 1f) {
                 move *= 1.75f;
-                Camera.main.fieldOfView = 70f;
+                Camera.main.fieldOfView = 60f;
             } else { 
                 Camera.main.fieldOfView = 60f;
             }
@@ -111,7 +111,6 @@ public class PlayerController : MonoBehaviour
             move = characterController.velocity;
             upwardVel -= (Constants.gravity * Time.fixedDeltaTime);
         }
-        
         move.y = upwardVel;
 
         characterController.Move(move * Time.fixedDeltaTime);
@@ -137,7 +136,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // move camera, clamp to vertical.
+    // f, clamp to vertical.
     private void MoveCamera() {
         Vector2 mouseInput = mouse.ReadValue<Vector2>() * sensitivity;
         camRotation.x = Mathf.Clamp(camRotation.x - mouseInput.y, -90f, 90f);
